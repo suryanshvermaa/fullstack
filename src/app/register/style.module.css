@@ -1,0 +1,53 @@
+.svImage{
+    background-image: url(./main.png);
+    background-size: cover;
+}
+.position{
+    position: absolute;
+    top:0;
+    
+}
+.positionSide{
+    position: absolute;
+    right: 0;
+    top:0;
+}
+.rightlogin{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.customFileInput {
+    color: transparent;
+    height: 50px;
+    width: 300px;
+  }
+  .customFileInput::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+  .customFileInput::before {
+    content: 'Upload Your Profile Picture';
+    color: #FF3707;
+    display: inline-block;
+    background:transparent;
+    border: 2px solid #FF3707;
+    border-radius: 2px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+   
+    font-weight: 700;
+    font-size: 10pt;
+  }
+  .customFileInput:hover::before {
+    background-color:  #FF3707;
+    color: white;
+  }
+  .customFileInput:active {
+    outline: 0;
+  }
+ 
+  
+ 
