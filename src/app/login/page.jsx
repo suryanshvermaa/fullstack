@@ -1,10 +1,36 @@
+"use client"
 import styles from "../register/style.module.css";
 import { ImOmega } from "react-icons/im";
 import Image from "next/image";
 import Education from "../register/education.png";
 import { FcGoogle } from "react-icons/fc";
+import axios from "axios";
+import { useState } from "react";
 
 const login = () => {
+  const [email,setEmail]=useState('');
+  const [password,setPassword]=useState('');
+
+  const handleSignIn=async()=>{
+    try {
+      const userData={
+        email,
+        password,
+        
+      };
+      console.log(userData)
+
+      const res=await axios.post('http://localhost:3000/api/auth/login',userData);
+      console.log(res.data);
+      
+    } catch (error) {
+      console.log('err');
+    }
+ 
+  }
+
+
+
   return (
     <>
       <div className={` h-[100vh] w-[100vw]  blur-md ${styles.svImage} `}></div>
@@ -26,18 +52,18 @@ const login = () => {
     
                <div className="w-[40%] ml-20 flex items-center justify-center"> <div className="mt-[70px] mr-20 w-[40%] flex flex-col justify-start">
           <label htmlFor="Email " className="text-[20px] text-[#484848] ">Email</label>
-          <input type="text" className="bg-transparent border-[#929292] border-[2px] w-[365px] h-[40px] rounded-md p-3 text-[#929292]" placeholder="Enter email here" />
+          <input type="text" className="bg-transparent border-[#929292] border-[2px] w-[365px] h-[40px] rounded-md p-3 text-[#929292]" placeholder="Enter email here" onChange={(e)=>setEmail(e.target.value)}/>
 
          
           <label htmlFor="Password" className="text-[20px] mt-9 text-[#484848]">Password</label>
-          <input type="password" className="bg-transparent border-[#929292] border-[2px] w-[365px] h-[40px] rounded-md p-3 text-[#929292]"  placeholder="Enter your password here" />
+          <input type="password" className="bg-transparent border-[#929292] border-[2px] w-[365px] h-[40px] rounded-md p-3 text-[#929292]"  placeholder="Enter your password here"onChange={(e)=>setPassword(e.target.value)} />
 
-          <button className="w-[365px] h-[40px] bg-[#FF3707] rounded-full mt-[90px] flex justify-center items-center font-bold text-[20px] text-white">
-              Sign Up
+          <button className="w-[365px] h-[40px] bg-[#FF3707] rounded-full mt-[90px] flex justify-center items-center font-bold text-[20px] text-white" onClick={handleSignIn} >
+              Sign In
             </button>
             <button className="w-[365px] h-[40px] bg-transparent border-[#929292] border-[2px] rounded-full mt-4 flex justify-center items-center font-bold text-[15px] text-[#929292]">
             <FcGoogle className="h-[30px] w-[30px] mr-3" />
-              Sign Up with google
+              Sign In with google
             </button>
 
            <div className="w-[365px] flex justify-center  h-[30px] mt-5">
