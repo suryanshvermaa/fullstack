@@ -4,15 +4,15 @@ import {NextResponse} from 'next/server';
 import jwt from 'jsonwebtoken';
 
 dbConnection();
+
 export async function POST(request){
+
     try {
         const res=await request.json();
-        const email=res.email;
-        const otp=res.otp;
+        const {email,password}=res;
         const user=await User.findOne({email});
-        const userOtp=await user.otp;
-        if(userOtp==otp){
-            
+        const userPassword=await user.password;
+        if(userPassword==password){
             const token=await jwt.sign({userId:user._id,username:user.name,category:user.category},'ansh9918028721');
             const res=NextResponse.json({
                message:'success'
@@ -21,14 +21,13 @@ export async function POST(request){
             return res;
         }else{
             return NextResponse.json({
-                error:'wrong OTP'
-            })
+                message:'wrong Password'
+            }) 
         }
-       
-        
+
     } catch (error) {
         return NextResponse.json({
-            error:'wrong OTP'
+            message:'error in login'
         })
     }
 }

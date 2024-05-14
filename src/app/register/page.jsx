@@ -13,11 +13,11 @@ import app from "../firebaseConfigurations/firebase";
 
 const register = () => {
     
-   const [email,setEmail]=useState('suryanshv.ug23.ee@nitp.ac.in');
+   const [email,setEmail]=useState('');
    const [password,setPassword]=useState('');
    const [name,setName]=useState('');
    const [otp,setOtp]=useState('');
-   const [category,setCategory]=useState('teacher');
+   const [category,setCategory]=useState('student');
    const [username,setUsername]=useState('');
    const [qualifications,setQualifications]=useState('');
    const [profilePic,setProfilePic]=useState('');
@@ -29,33 +29,55 @@ const register = () => {
   
 // const pathReference = ref(storage, '{suryanshv.ug23.ee@nitp.ac.in/1712588936464}');
 // console.log(pathReference)
-   console.log(document.cookie);
+   
+     const setScreen=(screen)=>{
 
+  setCurrPage(screen);
+}
 
 
 
    const storeInFirebaseStorage=()=>{
-    const filename=`{${email}/${Date.now()}}`
+    try {
+      const filename=`{${email}/${Date.now()}}`
     
     const storage = getStorage(app);
     const storageRef = ref(storage, filename);
-    uploadBytes(storageRef, profilePic).then((snapshot) => {
-      console.log(snapshot);
-    }), 
-    (error) => {
-       console.log('download unsuccessful')
-    }, 
-    () => {
-      
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        const url=downloadURL;
-        console.log('File available at', downloadURL);
-       
-      });
-    }
+    const uploadTask = uploadBytesResumable(storageRef, profilePic);
 
-    return filename;
+
+    uploadTask.on('state_changed', 
+      (snapshot) => {
+       
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running');
+            break;
+        }
+      }, 
+      (error) => {
+        // Handle unsuccessful uploads
+      }, 
+      () => {
+        // Handle successful uploads on complete
+        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log('File available at', downloadURL);
+          return downloadURL;
+        });
+      })
+    
+
+   
   
+    } catch (error) {
+      console.log('err');
+    }
    }
 
    const handleSignUp=async()=>{
@@ -104,6 +126,7 @@ const register = () => {
 
       const profilePicA= await storeInFirebaseStorage()
       const userData={
+        otp,
         email,
         category,
         username,
@@ -123,13 +146,10 @@ const register = () => {
 
 
 
-  const setScreen=(screen)=>{
-
-    setCurrPage(screen);
-  }
+ 
 
 
-  const [currPage,setCurrPage]=useState('information');
+  const [currPage,setCurrPage]=useState('signup');
   return (
     <>
       <div className={` h-[100vh] w-[100vw]  blur-md ${styles.svImage} `}></div>
